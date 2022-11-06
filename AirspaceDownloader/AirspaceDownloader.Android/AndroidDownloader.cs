@@ -18,13 +18,7 @@ namespace AirspaceDownloader.Droid
 
         public void DownloadFile(string url, string folder)
         {
-            var pathToNewFolder = Environment.ExternalStorageDirectory.AbsolutePath;
-
-            pathToNewFolder = Environment.GetExternalStoragePublicDirectory(Environment.DirectoryDocuments)
-                .AbsolutePath;
-
-            //Directory.CreateDirectory(pathToNewFolder);
-            //var pathToNewFolder = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal));
+            var pathToNewFolder = Environment.GetExternalStoragePublicDirectory(Environment.DirectoryDocuments).AbsolutePath;
 
             try
             {
@@ -36,16 +30,22 @@ namespace AirspaceDownloader.Droid
             catch (Exception ex)
             {
                 if (OnFileDownloaded != null)
-                    OnFileDownloaded.Invoke(this, new DownloadEventArgs(false));
+                    OnFileDownloaded.Invoke(this, new DownloadEventArgs(false, ex.Message));
             }
         }
 
+        /// <summary>
+        /// Completed
+        /// Download completed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Completed(object sender, AsyncCompletedEventArgs e)
         {
             if (e.Error != null)
             {
                 if (OnFileDownloaded != null)
-                    OnFileDownloaded.Invoke(this, new DownloadEventArgs(false));
+                    OnFileDownloaded.Invoke(this, new DownloadEventArgs(false, e.Error.Message));
             }
             else
             {

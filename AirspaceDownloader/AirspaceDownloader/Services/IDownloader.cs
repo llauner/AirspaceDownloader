@@ -12,10 +12,12 @@ namespace AirspaceDownloader.Services
     public class DownloadEventArgs : EventArgs
     {
         public bool FileSaved;
+        public string ErrorMessage = null;
 
-        public DownloadEventArgs(bool fileSaved)
+        public DownloadEventArgs(bool fileSaved, string errorMessage=null)
         {
             FileSaved = fileSaved;
+            ErrorMessage = errorMessage;
         }
     }
 }
