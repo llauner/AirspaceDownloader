@@ -1,19 +1,15 @@
 ﻿using AirspaceDownloader.Services;
-using AirspaceDownloader.Views;
-using System;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace AirspaceDownloader
 {
     public partial class App : Application
     {
-
         public App()
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
+            DependencyService.Register<IDownloader>();
             MainPage = new AppShell();
         }
 
