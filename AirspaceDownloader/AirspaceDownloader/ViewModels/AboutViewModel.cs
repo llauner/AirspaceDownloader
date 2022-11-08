@@ -34,6 +34,10 @@ namespace AirspaceDownloader.ViewModels
             }
         }
 
+        /// <summary>
+        ///     RequestPermissions
+        /// </summary>
+        /// <returns></returns>
         private async Task RequestPermissions()
         {
             var status = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
