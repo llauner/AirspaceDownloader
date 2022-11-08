@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 namespace AirspaceDownloader.Services
 {
-    public interface IDownloader
+    public interface IFileDownloader
     {
         void DownloadFile(string url, string folder);
         event EventHandler<DownloadEventArgs> OnFileDownloaded;
@@ -11,10 +10,10 @@ namespace AirspaceDownloader.Services
 
     public class DownloadEventArgs : EventArgs
     {
+        public string ErrorMessage;
         public bool FileSaved;
-        public string ErrorMessage = null;
 
-        public DownloadEventArgs(bool fileSaved, string errorMessage=null)
+        public DownloadEventArgs(bool fileSaved, string errorMessage = null)
         {
             FileSaved = fileSaved;
             ErrorMessage = errorMessage;

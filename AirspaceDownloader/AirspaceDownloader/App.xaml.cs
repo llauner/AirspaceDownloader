@@ -9,7 +9,7 @@ namespace AirspaceDownloader
         {
             InitializeComponent();
 
-            DependencyService.Register<IDownloader>();
+            DependencyService.Register<IFileDownloader>();
             MainPage = new AppShell();
         }
 

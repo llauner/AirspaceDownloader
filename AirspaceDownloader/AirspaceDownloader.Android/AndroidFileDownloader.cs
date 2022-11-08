@@ -2,23 +2,23 @@
 using System.ComponentModel;
 using System.IO;
 using System.Net;
-using System.Threading.Tasks;
 using AirspaceDownloader.Droid;
 using AirspaceDownloader.Services;
 using Xamarin.Forms;
 using Environment = Android.OS.Environment;
 
-[assembly: Dependency(typeof(AndroidDownloader))]
+[assembly: Dependency(typeof(AndroidFileDownloader))]
 
 namespace AirspaceDownloader.Droid
 {
-    public class AndroidDownloader : IDownloader
+    public class AndroidFileDownloader : IFileDownloader
     {
         public event EventHandler<DownloadEventArgs> OnFileDownloaded;
 
         public void DownloadFile(string url, string folder)
         {
-            var pathToNewFolder = Environment.GetExternalStoragePublicDirectory(Environment.DirectoryDocuments).AbsolutePath;
+            var pathToNewFolder = Environment.GetExternalStoragePublicDirectory(Environment.DirectoryDocuments)
+                .AbsolutePath;
 
             try
             {
@@ -35,8 +35,8 @@ namespace AirspaceDownloader.Droid
         }
 
         /// <summary>
-        /// Completed
-        /// Download completed
+        ///     Completed
+        ///     Download completed
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
