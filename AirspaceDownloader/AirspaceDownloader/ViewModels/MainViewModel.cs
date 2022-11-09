@@ -8,7 +8,7 @@ using Xamarin.Forms;
 
 namespace AirspaceDownloader.ViewModels
 {
-    public class AboutViewModel : BaseViewModel
+    public class MainViewModel : BaseViewModel
     {
         private readonly IFileDownloader _fileDownloader = DependencyService.Get<IFileDownloader>();
         private bool _isDownloadEnabled = true;
@@ -17,7 +17,7 @@ namespace AirspaceDownloader.ViewModels
 
         /// <summary>
         /// </summary>
-        public AboutViewModel()
+        public MainViewModel()
         {
             Title = "Airspace Downloader";
             DownloadFileCommand = new Command(OnDownloadFileClick);

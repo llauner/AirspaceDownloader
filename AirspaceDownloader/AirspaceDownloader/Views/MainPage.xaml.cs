@@ -4,19 +4,19 @@ using Xamarin.Forms;
 
 namespace AirspaceDownloader.Views
 {
-    public partial class AboutPage : ContentPage
+    public partial class MainPage : ContentPage
     {
-        public AboutPage()
+        public MainPage()
         {
             InitializeComponent();
         }
 
         protected override void OnAppearing()
         {
-            MessagingCenter.Subscribe<AboutViewModel>(this, FileDownloadResult.Success.ToString(),
+            MessagingCenter.Subscribe<MainViewModel>(this, FileDownloadResult.Success.ToString(),
                 async sender => { await DisplayAlert("Alert", "File downloaded !", "OK"); });
 
-            MessagingCenter.Subscribe<AboutViewModel, string>(this, FileDownloadResult.Error.ToString(),
+            MessagingCenter.Subscribe<MainViewModel, string>(this, FileDownloadResult.Error.ToString(),
                 async (sender, errorMessage) =>
                 {
                     await DisplayAlert("Error downloading file !", errorMessage, "OK");
