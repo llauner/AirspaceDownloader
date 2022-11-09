@@ -12,7 +12,11 @@ namespace AirspaceDownloader.ViewModels
     {
         private readonly IFileDownloader _fileDownloader = DependencyService.Get<IFileDownloader>();
         private bool _isDownloadEnabled = true;
+        private bool _isTargetSelectedDownloads = true;
+        private bool _isTargetSelectedXcSoar = true;
 
+        /// <summary>
+        /// </summary>
         public AboutViewModel()
         {
             Title = "Airspace Downloader";
@@ -34,6 +38,50 @@ namespace AirspaceDownloader.ViewModels
             }
         }
 
+        public bool IsTargetSelectedDownloads
+        {
+            get => _isTargetSelectedDownloads;
+            set
+            {
+                SetProperty(ref _isTargetSelectedDownloads, value);
+                OnPropertyChanged(nameof(IsTargetSelectedDownloads));
+            }
+        }
+
+        public bool IsTargetSelectedXcSoar
+        {
+            get => _isTargetSelectedXcSoar;
+            set
+            {
+                SetProperty(ref _isTargetSelectedXcSoar, value);
+                OnPropertyChanged(nameof(IsTargetSelectedXcSoar));
+            }
+        }
+
+        public string AirspaceFileUrl { get; } = "https://planeur-net.github.io/airspace/france.txt";
+
+
+        /// <summary>
+        ///     OnDownloadFileClick
+        /// </summary>
+        /// <param name="obj"></param>
+        private async void OnDownloadFileClick(object obj)
+        {
+            Console.Out.WriteLine($"IsTargetSelectedDownloads={IsTargetSelectedDownloads}");
+            Console.Out.WriteLine($"IsTargetSelectedXcSoar={IsTargetSelectedXcSoar}");
+
+            // Get Parameters
+            _fileDownloader.IsSaveForDownloads = IsTargetSelectedDownloads;
+            _fileDownloader.IsSaveForXcSoar = IsTargetSelectedXcSoar;
+
+            // Get Download locations
+            IsDownloadEnabled = false;
+            await RequestPermissions();
+
+            _fileDownloader.DownloadFile(AirspaceFileUrl);
+        }
+
+
         /// <summary>
         ///     RequestPermissions
         /// </summary>
@@ -47,18 +95,6 @@ namespace AirspaceDownloader.ViewModels
             if (status2 != PermissionStatus.Granted) await Permissions.RequestAsync<Permissions.StorageRead>();
         }
 
-        /// <summary>
-        ///     OnDownloadFileClick
-        /// </summary>
-        /// <param name="obj"></param>
-        private async void OnDownloadFileClick(object obj)
-        {
-            await Console.Out.WriteLineAsync("ok");
-            IsDownloadEnabled = false;
-            await RequestPermissions();
-
-            _fileDownloader.DownloadFile("https://planeur-net.github.io/airspace/france.txt", "");
-        }
 
         /// <summary>
         ///     OnFileDownloaded
@@ -69,15 +105,26 @@ namespace AirspaceDownloader.ViewModels
         {
             if (e.FileSaved)
             {
+                // Success: Save File to designated locations
+                if (IsTargetSelectedDownloads) // Save for SeeYouNavigator: /Downdloads
+                {
+                }
+
+                if (IsTargetSelectedXcSoar) // Save for XCSoar :/XCSoarData
+                {
+                }
+
+                // Notify
                 MessagingCenter.Send(this, FileDownloadResult.Success.ToString());
-                Console.Out.WriteLine("XF Downloader: File Saved Successfully", "File Saved Successfully", "Close");
+                Console.Out.WriteLine("File Saved Successfully", "File Saved Successfully", "Close");
             }
 
             else
             {
+                // Error while downloading the file
+                // Notify
                 MessagingCenter.Send(this, FileDownloadResult.Error.ToString(), e.ErrorMessage);
-                Console.Out.WriteLine("XF Downloader: Error while saving the file", "Error while saving the file",
-                    "Close");
+                Console.Out.WriteLine("Error while saving the file", "Error while saving the file", "Close");
             }
 
             IsDownloadEnabled = true;

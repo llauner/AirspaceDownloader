@@ -4,7 +4,10 @@ namespace AirspaceDownloader.Services
 {
     public interface IFileDownloader
     {
-        void DownloadFile(string url, string folder);
+        bool IsSaveForDownloads { get; set; }
+        bool IsSaveForXcSoar { get; set; }
+
+        void DownloadFile(string url);
         event EventHandler<DownloadEventArgs> OnFileDownloaded;
     }
 
