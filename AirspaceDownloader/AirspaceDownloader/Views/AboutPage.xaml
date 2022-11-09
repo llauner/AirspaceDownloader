@@ -33,9 +33,9 @@
 
 
         <ScrollView Grid.Row="1">
-            <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Padding="40,0,0,0">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Padding="40,25,0,0">
                 <ContentView>
-                    <CheckBox  IsChecked="{Binding IsTargetSelectedDownloads}"></CheckBox>
+                    <CheckBox  IsChecked="{Binding IsTargetSelectedDownloads}" WidthRequest="25" HeightRequest="25"/>
                 </ContentView>
                 <Label
                     Text="SeeYou Navigator -> /Downloads" HorizontalOptions="StartAndExpand"></Label>
@@ -43,9 +43,9 @@
         </ScrollView>
 
         <ScrollView Grid.Row="2">
-            <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Padding="40,0,0,0">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Padding="40,25,0,0">
                 <ContentView>
-                    <CheckBox  IsChecked="{Binding IsTargetSelectedXcSoar}"></CheckBox>
+                    <CheckBox  IsChecked="{Binding IsTargetSelectedXcSoar}" WidthRequest="25" HeightRequest="25"/>
                 </ContentView>
                 <Label
                     Text="XCSoar -> /XCSoarData" HorizontalOptions="StartAndExpand"></Label>
@@ -53,9 +53,9 @@
         </ScrollView>
 
 
-        <ScrollView Grid.Row="4">
-            <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10">
-                <Label Text="Download Netcoupe airspace: france.txt" FontSize="18"  FontAttributes="Bold"/>
+        <ScrollView Grid.Row="3">
+            <StackLayout Orientation="Vertical" Padding="30,70,30,24" Spacing="10">
+                <Label Text="Download Netcoupe airspace" FontSize="18"  FontAttributes="Bold"/>
                 <Label Text="{Binding AirspaceFileUrl}" FontSize="14" Padding="0,0,0,0"/>
 
                 <Button Margin="0,10,0,0" Text="Download"
