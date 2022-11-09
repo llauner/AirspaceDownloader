@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AirspaceDownloader.Views.AboutPage"
+             xmlns:vm="clr-namespace:AirspaceDownloader.ViewModels"
+             xmlns:airspaceDownloader="clr-namespace:AirspaceDownloader;assembly=AirspaceDownloader"
+             xmlns:local="clr-namespace:AirspaceDownloader;assembly=AirspaceDownloader"
+             xmlns:userInterface="clr-namespace:AirspaceDownloader.UserInterface;assembly=AirspaceDownloader"
+             Title="{Binding Title}">
+    
+    <ContentPage.BindingContext>
+        <vm:AboutViewModel />
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Accent">#96d1ff</Color>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackLayout BackgroundColor="{StaticResource Accent}" VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
+                <ContentView Padding="0,40,0,40" VerticalOptions="FillAndExpand">
+                    <Image Source="app_icon.png" VerticalOptions="Center" HeightRequest="64" />
+                </ContentView>
+            </StackLayout>
+        </StackLayout>
+
+        <ScrollView Grid.Row="1">
+            <StackLayout Orientation="Vertical"  HorizontalOptions="Center" Padding="30,70,30,24" Spacing="10">
+                <Label Text="Airspace Downloader" FontSize="18"  FontAttributes="Bold"/>
+                <Label Text="{Binding AirspaceFileUrl}" FontSize="14" Padding="0,0,0,0"/>
+            </StackLayout>
+        </ScrollView>
+
+
+        <ScrollView Grid.Row="2">
+            <StackLayout Orientation="Vertical"  HorizontalOptions="Start" Padding="15,50,0,0" Spacing="10">
+                <userInterface:HyperlinkLabel Text="https://github.com/llauner/AirspaceDownloader"
+                                      Url="https://github.com/llauner/AirspaceDownloader"
+                                      HorizontalOptions="Center" />
+
+                <Label Padding="0,15,0,0">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Author: " />
+                            <userInterface:HyperlinkSpan Text="Ludovic Launer"
+                                                 Url="mailto:ludovic@launer.fr" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+            </StackLayout>
+        </ScrollView>
+
+
+
+   
+    </Grid>
+
+</ContentPage>
