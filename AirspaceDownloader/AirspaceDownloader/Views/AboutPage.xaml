@@ -37,7 +37,7 @@
         <ScrollView Grid.Row="1">
             <StackLayout Orientation="Vertical"  HorizontalOptions="Center" Padding="30,70,30,24" Spacing="10">
                 <Label Text="Airspace Downloader" FontSize="18"  FontAttributes="Bold"/>
-                <Label Text="{Binding AirspaceFileUrl}" FontSize="14" Padding="0,0,0,0"/>
+                <Label Text="{Binding AppVersion}" FontSize="14" Padding="0,0,0,0"/>
             </StackLayout>
         </ScrollView>
 

@@ -1,4 +1,6 @@
-﻿namespace AirspaceDownloader.ViewModels
+﻿using Xamarin.Essentials;
+
+namespace AirspaceDownloader.ViewModels
 {
     public class AboutViewModel : BaseViewModel
     {
@@ -8,5 +10,7 @@
         {
             Title = "Airspace Downloader";
         }
+
+        public string AppVersion => AppInfo.VersionString;
     }
 }
