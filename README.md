@@ -5,7 +5,8 @@ https://github.com/planeur-net/airspace
 https://github.com/planeur-net/outlanding
 
 
-![Dcreenshot](doc/images/screenshot_main_screen.jpg)
+![Dcreenshot](doc/images/screenshot_main_screen.jpg)  
+
 ## Files
 Downloads the following files:  
 https://planeur-net.github.io/airspace/france.txt  
