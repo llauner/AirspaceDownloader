@@ -8,7 +8,7 @@ namespace AirspaceDownloader.ViewModels
         /// </summary>
         public AboutViewModel()
         {
-            Title = "Airspace Downloader";
+            Title = "github.com/planeur-net Downloader";
         }
 
         public string AppVersion => AppInfo.VersionString;

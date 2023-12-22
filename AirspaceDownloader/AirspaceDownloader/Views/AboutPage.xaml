@@ -36,7 +36,7 @@
 
         <ScrollView Grid.Row="1">
             <StackLayout Orientation="Vertical"  HorizontalOptions="Center" Padding="30,70,30,24" Spacing="10">
-                <Label Text="Airspace Downloader" FontSize="18"  FontAttributes="Bold"/>
+                <Label Text="github.com/planeur-net Downloader" FontSize="18"  FontAttributes="Bold"/>
                 <Label Text="{Binding AppVersion}" FontSize="14" Padding="0,0,0,0"/>
             </StackLayout>
         </ScrollView>
@@ -46,6 +46,12 @@
             <StackLayout Orientation="Vertical"  HorizontalOptions="Start" Padding="15,50,0,0" Spacing="10">
                 <userInterface:HyperlinkLabel Text="https://github.com/llauner/AirspaceDownloader"
                                       Url="https://github.com/llauner/AirspaceDownloader"
+                                      HorizontalOptions="Center" />
+                <userInterface:HyperlinkLabel Text="https://github.com/planeur-net/airspace"
+                                      Url="https://github.com/planeur-net/airspace"
+                                      HorizontalOptions="Center" />
+                <userInterface:HyperlinkLabel Text="https://github.com/planeur-net/outlanding"
+                                      Url="https://github.com/planeur-net/outlanding"
                                       HorizontalOptions="Center" />
 
                 <Label Padding="0,15,0,0">

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -19,32 +20,56 @@ namespace AirspaceDownloader.Droid
         private readonly string _xcsoarPath =
             Path.Combine(Environment.ExternalStorageDirectory.AbsolutePath, "XCSoarData");
 
-        private string _downloadedFileName;
+        private List<string> _listUrlsToDownload = new List<string>();
+        private int _filesDownloadedCount = 0;
 
         public bool IsSaveForDownloads { get; set; }
         public bool IsSaveForXcSoar { get; set; }
+        public int NbFilesToDownload => _listUrlsToDownload.Count;
+        public int FilesDownloadedCount
+        {
+            get
+            {
+                return _filesDownloadedCount;
+            }
+            set 
+            { 
+                _filesDownloadedCount= value;
+            }
+        }
+        public bool IsDownloadBatchFinished => NbFilesToDownload == FilesDownloadedCount;
+
         public event EventHandler<DownloadEventArgs> OnFileDownloaded;
 
+        public AndroidFileDownloader()
+        {
+            FilesDownloadedCount = 0;
+        }
 
         /// <summary>
-        ///     DownloadFile
+        /// Download Outlanding, mountain passes, waypoints from repo: https://github.com/planeur-net/outlanding
         /// </summary>
-        /// <param name="url"></param>
-        public void DownloadFile(string url)
+        /// <param name="listUrls"></param>
+        public void DownloadFiles(List<string> listUrls)
         {
-            try
+            FilesDownloadedCount = 0;
+            _listUrlsToDownload = listUrls;
+            foreach (var url in _listUrlsToDownload)
             {
-                _downloadedFileName = Path.GetFileName(url);
-                // Download
-                var webClient = new WebClient();
-                webClient.DownloadDataCompleted += DownloadDataCallback;
+                try
+                {
+                    var downloadedFileName = Path.GetFileName(url);
+                    // Download
+                    var webClient = new WebClient();
+                    webClient.DownloadDataCompleted += DownloadDataCallback;
 
-                webClient.DownloadDataAsync(new Uri(url));
-            }
-            catch (Exception ex)
-            {
-                if (OnFileDownloaded != null)
-                    OnFileDownloaded.Invoke(this, new DownloadEventArgs(false, ex.Message));
+                    webClient.DownloadDataAsync(new Uri(url), downloadedFileName);
+                }
+                catch (Exception ex)
+                {
+                    if (OnFileDownloaded != null)
+                        OnFileDownloaded.Invoke(this, new DownloadEventArgs(false, ex.Message));
+                }
             }
         }
 
@@ -62,21 +87,23 @@ namespace AirspaceDownloader.Droid
                 // Get the file
                 var data = e.Result;
                 var textData = Encoding.UTF8.GetString(data);
+                var downloadedFileName = e.UserState.ToString();
 
                 // Save to disk
                 if (IsSaveForDownloads) // Downloads: SeeYou Navigator
                 {
-                    var pathToNewFile = Path.Combine(_downloadPath, _downloadedFileName);
+                    var pathToNewFile = Path.Combine(_downloadPath, downloadedFileName);
                     File.WriteAllText(pathToNewFile, textData);
                 }
 
                 if (IsSaveForXcSoar) // XCSoar
                 {
-                    var pathToNewFile = Path.Combine(_xcsoarPath, _downloadedFileName);
+                    var pathToNewFile = Path.Combine(_xcsoarPath, downloadedFileName);
                     File.WriteAllText(pathToNewFile, textData);
                 }
 
                 // Notify: 
+                FilesDownloadedCount++;
                 OnFileDownloaded?.Invoke(this, new DownloadEventArgs(true));
             }
             else

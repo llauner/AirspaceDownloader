@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using AirspaceDownloader.Models;
@@ -19,7 +20,7 @@ namespace AirspaceDownloader.ViewModels
         /// </summary>
         public MainViewModel()
         {
-            Title = "Airspace Downloader";
+            Title = "github.com Downloader";
             DownloadFileCommand = new Command(OnDownloadFileClick);
             IsDownloadEnabled = true;
 
@@ -59,7 +60,9 @@ namespace AirspaceDownloader.ViewModels
         }
 
         public string AirspaceFileUrl { get; } = "https://planeur-net.github.io/airspace/france.txt";
-
+        public string GuideDesAiresFileUrl { get; } = "https://planeur-net.github.io/outlanding/guide_aires_securite.cup";
+        public string ChampsDesAlpesFileUrl { get; } = "https://planeur-net.github.io/outlanding/champs_des_alpes.cup";
+        public string ColsDesAlpesFileUrl { get; } = "https://planeur-net.github.io/outlanding/cols_des_alpes.cup";
 
         /// <summary>
         ///     OnDownloadFileClick
@@ -78,7 +81,7 @@ namespace AirspaceDownloader.ViewModels
             IsDownloadEnabled = false;
             await RequestPermissions();
 
-            _fileDownloader.DownloadFile(AirspaceFileUrl);
+            _fileDownloader.DownloadFiles(new List<string> { AirspaceFileUrl, GuideDesAiresFileUrl, ChampsDesAlpesFileUrl, ColsDesAlpesFileUrl });
         }
 
 
@@ -115,8 +118,11 @@ namespace AirspaceDownloader.ViewModels
                 }
 
                 // Notify
-                MessagingCenter.Send(this, FileDownloadResult.Success.ToString());
-                Console.Out.WriteLine("File Saved Successfully", "File Saved Successfully", "Close");
+                if (_fileDownloader.IsDownloadBatchFinished)
+                {
+                    MessagingCenter.Send(this, FileDownloadResult.Success.ToString());
+                    Console.Out.WriteLine("File Saved Successfully", "File Saved Successfully", "Close");
+                }
             }
 
             else

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace AirspaceDownloader.Services
 {
@@ -6,8 +7,11 @@ namespace AirspaceDownloader.Services
     {
         bool IsSaveForDownloads { get; set; }
         bool IsSaveForXcSoar { get; set; }
+        int NbFilesToDownload { get; }
+        int FilesDownloadedCount { get; set; }
+        bool IsDownloadBatchFinished { get; }
 
-        void DownloadFile(string url);
+        void DownloadFiles(List<string> listUrls);
         event EventHandler<DownloadEventArgs> OnFileDownloaded;
     }
 

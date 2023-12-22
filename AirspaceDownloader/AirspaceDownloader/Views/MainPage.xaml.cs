@@ -14,7 +14,7 @@ namespace AirspaceDownloader.Views
         protected override void OnAppearing()
         {
             MessagingCenter.Subscribe<MainViewModel>(this, FileDownloadResult.Success.ToString(),
-                async sender => { await DisplayAlert("Alert", "File downloaded !", "OK"); });
+                async sender => { await DisplayAlert("Alert", "Files downloaded !", "OK"); });
 
             MessagingCenter.Subscribe<MainViewModel, string>(this, FileDownloadResult.Error.ToString(),
                 async (sender, errorMessage) =>
