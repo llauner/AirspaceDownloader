@@ -10,9 +10,11 @@ namespace AirspaceDownloader.Services
         int NbFilesToDownload { get; }
         int FilesDownloadedCount { get; set; }
         bool IsDownloadBatchFinished { get; }
+        string XCSoarDownloadPath { get; set; }
 
         void DownloadFiles(List<string> listUrls);
         event EventHandler<DownloadEventArgs> OnFileDownloaded;
+        string GetDfaultXCSoarDownloadPath();
     }
 
     public class DownloadEventArgs : EventArgs

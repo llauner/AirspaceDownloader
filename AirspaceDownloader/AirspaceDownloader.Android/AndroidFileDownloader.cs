@@ -17,8 +17,8 @@ namespace AirspaceDownloader.Droid
         private readonly string _downloadPath =
             Environment.GetExternalStoragePublicDirectory(Environment.DirectoryDownloads).AbsolutePath;
 
-        private readonly string _xcsoarPath =
-            Path.Combine(Environment.ExternalStorageDirectory.AbsolutePath, "XCSoarData");
+        private string _xcsoarDownloadPath = null;
+            
 
         private List<string> _listUrlsToDownload = new List<string>();
         private int _filesDownloadedCount = 0;
@@ -37,6 +37,20 @@ namespace AirspaceDownloader.Droid
                 _filesDownloadedCount= value;
             }
         }
+
+        public string XCSoarDownloadPath
+        {
+            get
+            {
+                return (_xcsoarDownloadPath is null) ? GetDfaultXCSoarDownloadPath() : _xcsoarDownloadPath;
+            }
+            set
+            {
+                value = (value is null) ? GetDfaultXCSoarDownloadPath() : value;
+                _xcsoarDownloadPath = value;
+            }
+        }
+
         public bool IsDownloadBatchFinished => NbFilesToDownload == FilesDownloadedCount;
 
         public event EventHandler<DownloadEventArgs> OnFileDownloaded;
@@ -98,7 +112,7 @@ namespace AirspaceDownloader.Droid
 
                 if (IsSaveForXcSoar) // XCSoar
                 {
-                    var pathToNewFile = Path.Combine(_xcsoarPath, downloadedFileName);
+                    var pathToNewFile = Path.Combine(XCSoarDownloadPath, downloadedFileName);
                     File.WriteAllText(pathToNewFile, textData);
                 }
 
@@ -111,6 +125,15 @@ namespace AirspaceDownloader.Droid
                 // Error while downloading the file
                 OnFileDownloaded?.Invoke(this, new DownloadEventArgs(false, e.Error.ToString()));
             }
+        }
+
+        /// <summary>
+        /// Default XCSoar Download path
+        /// </summary>
+        /// <returns></returns>
+        public string GetDfaultXCSoarDownloadPath()
+        {
+            return Path.Combine(Environment.ExternalStorageDirectory.AbsolutePath, "XCSoarData");
         }
     }
 }
