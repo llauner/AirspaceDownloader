@@ -33,7 +33,7 @@
 
 
         <ScrollView Grid.Row="1">
-            <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Padding="40,25,0,0">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Padding="30,15,0,0">
                 <ContentView>
                     <CheckBox  IsChecked="{Binding IsTargetSelectedDownloads}" WidthRequest="25" HeightRequest="25"/>
                 </ContentView>
@@ -43,11 +43,11 @@
         </ScrollView>
 
         <ScrollView Grid.Row="2">
-            <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Padding="40,25,0,0">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Padding="30,25,0,0">
                 <ContentView>
                     <CheckBox  IsChecked="{Binding IsTargetSelectedXcSoar}" WidthRequest="25" HeightRequest="25"/>
                 </ContentView>
-                <Entry x:Name="entry" HorizontalOptions="Start" WidthRequest="250"  FontSize="12" Text="{Binding XCSoarDownloadPath}" />
+                <Entry x:Name="entry" HorizontalOptions="Start" WidthRequest="200"  FontSize="12" Text="{Binding XCSoarDownloadPath}" />
                 <Button Margin="0,10,0,0" Text="Reset"
                         WidthRequest="60"
                         HeightRequest="35"
@@ -61,7 +61,7 @@
 
 
         <ScrollView Grid.Row="3">
-            <StackLayout Orientation="Vertical" Padding="30,50,30,24" Spacing="10">
+            <StackLayout Orientation="Vertical" Padding="20,30,30,24" Spacing="10">
                 <Label Text="Download from github.com/planeur-net" FontSize="18"  FontAttributes="Bold"/>
                 <Label Text="{Binding AirspaceFileUrl}" FontSize="10" Padding="0,0,0,0"/>
                 <Label Text="{Binding GuideDesAiresFileUrl}" FontSize="10" Padding="0,0,0,0"/>

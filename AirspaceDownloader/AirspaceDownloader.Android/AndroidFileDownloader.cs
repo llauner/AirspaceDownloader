@@ -112,8 +112,15 @@ namespace AirspaceDownloader.Droid
 
                 if (IsSaveForXcSoar) // XCSoar
                 {
-                    var pathToNewFile = Path.Combine(XCSoarDownloadPath, downloadedFileName);
-                    File.WriteAllText(pathToNewFile, textData);
+                    try
+                    {
+                        var pathToNewFile = Path.Combine(XCSoarDownloadPath, downloadedFileName);
+                        File.WriteAllText(pathToNewFile, textData);
+                    }
+                    catch (DirectoryNotFoundException dnfe)
+                    {
+                        OnFileDownloaded?.Invoke(this, new DownloadEventArgs(false, dnfe.Message));
+                    }
                 }
 
                 // Notify: 
