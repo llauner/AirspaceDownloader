@@ -11,10 +11,19 @@ namespace AirspaceDownloader.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
+        public string AirspaceFileUrl { get; } = "https://planeur-net.github.io/airspace/france.txt";
+        public string GuideDesAiresFileUrl { get; } = "https://planeur-net.github.io/outlanding/guide_aires_securite.cup";
+        public string ChampsDesAlpesFileUrl { get; } = "https://planeur-net.github.io/outlanding/champs_des_alpes.cup";
+        public string ColsDesAlpesFileUrl { get; } = "https://planeur-net.github.io/outlanding/cols_des_alpes.cup";
+
+        public ICommand DownloadFileCommand { get; }
+        public ICommand ResetXCSoarDownloadPathCommand { get; }
+
         private readonly IFileDownloader _fileDownloader = DependencyService.Get<IFileDownloader>();
         private bool _isDownloadEnabled = true;
         private bool _isTargetSelectedDownloads = true;
         private bool _isTargetSelectedXcSoar = true;
+        private string _xcsoarDownloadPath = null;
 
         /// <summary>
         /// </summary>
@@ -22,12 +31,18 @@ namespace AirspaceDownloader.ViewModels
         {
             Title = "github.com Downloader";
             DownloadFileCommand = new Command(OnDownloadFileClick);
+            ResetXCSoarDownloadPathCommand = new Command(ResetXCSoarDownloadPathClick);
             IsDownloadEnabled = true;
 
             _fileDownloader.OnFileDownloaded += OnFileDownloaded;
-        }
 
-        public ICommand DownloadFileCommand { get; }
+            var prefXCSoarDownloadPath = Preferences.Get("xcsoarStorePath", null);
+            XCSoarDownloadPath = (prefXCSoarDownloadPath is null) ? _fileDownloader.GetDfaultXCSoarDownloadPath() : prefXCSoarDownloadPath;
+            _fileDownloader.XCSoarDownloadPath = XCSoarDownloadPath;
+
+            IsTargetSelectedDownloads = Preferences.Get("IsTargetSelectedDownloads", true);
+            IsTargetSelectedXcSoar = Preferences.Get("IsTargetSelectedXcSoar", true);
+        }
 
         public bool IsDownloadEnabled
         {
@@ -44,6 +59,8 @@ namespace AirspaceDownloader.ViewModels
             get => _isTargetSelectedDownloads;
             set
             {
+                Preferences.Set("IsTargetSelectedDownloads", value);
+
                 SetProperty(ref _isTargetSelectedDownloads, value);
                 OnPropertyChanged(nameof(IsTargetSelectedDownloads));
             }
@@ -54,15 +71,25 @@ namespace AirspaceDownloader.ViewModels
             get => _isTargetSelectedXcSoar;
             set
             {
+                Preferences.Set("IsTargetSelectedXcSoar", value);
+
                 SetProperty(ref _isTargetSelectedXcSoar, value);
                 OnPropertyChanged(nameof(IsTargetSelectedXcSoar));
             }
         }
 
-        public string AirspaceFileUrl { get; } = "https://planeur-net.github.io/airspace/france.txt";
-        public string GuideDesAiresFileUrl { get; } = "https://planeur-net.github.io/outlanding/guide_aires_securite.cup";
-        public string ChampsDesAlpesFileUrl { get; } = "https://planeur-net.github.io/outlanding/champs_des_alpes.cup";
-        public string ColsDesAlpesFileUrl { get; } = "https://planeur-net.github.io/outlanding/cols_des_alpes.cup";
+        public string XCSoarDownloadPath
+        {
+            get => _xcsoarDownloadPath;
+            set
+            {
+                value = string.IsNullOrEmpty(value) ? null : value;
+                Preferences.Set("xcsoarStorePath", value);
+
+                SetProperty(ref _xcsoarDownloadPath, value);
+                OnPropertyChanged(nameof(XCSoarDownloadPath));
+            }
+        }
 
         /// <summary>
         ///     OnDownloadFileClick
@@ -73,7 +100,11 @@ namespace AirspaceDownloader.ViewModels
             Console.Out.WriteLine($"IsTargetSelectedDownloads={IsTargetSelectedDownloads}");
             Console.Out.WriteLine($"IsTargetSelectedXcSoar={IsTargetSelectedXcSoar}");
 
-            // Get Parameters
+            // Store path preferences
+            //Preferences.Set("xcsoarStorePath", XCSoarDownloadPath);
+
+            // Setup fileDownloader Parameters
+            _fileDownloader.XCSoarDownloadPath = XCSoarDownloadPath;
             _fileDownloader.IsSaveForDownloads = IsTargetSelectedDownloads;
             _fileDownloader.IsSaveForXcSoar = IsTargetSelectedXcSoar;
 
@@ -134,6 +165,11 @@ namespace AirspaceDownloader.ViewModels
             }
 
             IsDownloadEnabled = true;
+        }
+
+        private void ResetXCSoarDownloadPathClick(object obj)
+        {
+            XCSoarDownloadPath = _fileDownloader.GetDfaultXCSoarDownloadPath();
         }
     }
 }
