@@ -130,7 +130,8 @@ namespace AirspaceDownloader.Droid
             else
             {
                 // Error while downloading the file
-                OnFileDownloaded?.Invoke(this, new DownloadEventArgs(false, e.Error.ToString()));
+                OnFileDownloaded?.Invoke(this, new DownloadEventArgs(false, "No Internet Connection ?"));
+                Console.WriteLine(e.Error.ToString());
             }
         }
 
