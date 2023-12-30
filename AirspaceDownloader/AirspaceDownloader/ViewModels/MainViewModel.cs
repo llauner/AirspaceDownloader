@@ -11,10 +11,13 @@ namespace AirspaceDownloader.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        public string AirspaceFileUrl { get; } = "https://planeur-net.github.io/airspace/france.txt";
-        public string GuideDesAiresFileUrl { get; } = "https://planeur-net.github.io/outlanding/guide_aires_securite.cup";
-        public string ChampsDesAlpesFileUrl { get; } = "https://planeur-net.github.io/outlanding/champs_des_alpes.cup";
-        public string ColsDesAlpesFileUrl { get; } = "https://planeur-net.github.io/outlanding/cols_des_alpes.cup";
+        public static string AirspaceFileUrl { get; } = "https://planeur-net.github.io/airspace/france.txt";
+        public static string GuideDesAiresFileUrl { get; } = "https://planeur-net.github.io/outlanding/guide_aires_securite.cup";
+        public static string ChampsDesAlpesFileUrl { get; } = "https://planeur-net.github.io/outlanding/champs_des_alpes.cup";
+        public static string ColsDesAlpesFileUrl { get; } = "https://planeur-net.github.io/outlanding/cols_des_alpes.cup";
+        public static string MontagnesDesAlpesFileURL { get; } = "https://planeur-net.github.io/outlanding/montagnes_des_alpes.cup";
+
+        public List<string> ListFilesToDownload = new List<string> { AirspaceFileUrl, GuideDesAiresFileUrl, ChampsDesAlpesFileUrl, ColsDesAlpesFileUrl, MontagnesDesAlpesFileURL };
 
         public ICommand DownloadFileCommand { get; }
         public ICommand ResetXCSoarDownloadPathCommand { get; }
@@ -112,7 +115,7 @@ namespace AirspaceDownloader.ViewModels
             IsDownloadEnabled = false;
             await RequestPermissions();
 
-            _fileDownloader.DownloadFiles(new List<string> { AirspaceFileUrl, GuideDesAiresFileUrl, ChampsDesAlpesFileUrl, ColsDesAlpesFileUrl });
+            _fileDownloader.DownloadFiles(ListFilesToDownload);
         }
 
 
