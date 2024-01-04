@@ -37,6 +37,7 @@ namespace AirspaceDownloader.ViewModels
         private bool _isTargetSelectedDownloads = true;
         private bool _isTargetSelectedXcSoar = true;
         private string _xcsoarDownloadPath = null;
+        private string _logText = "";
 
         /// <summary>
         /// </summary>
@@ -48,6 +49,7 @@ namespace AirspaceDownloader.ViewModels
             IsDownloadEnabled = true;
 
             _fileDownloader.OnFileDownloaded += OnFileDownloaded;
+            _fileDownloader.OnLogUpdateRequested += OnLogUpdateRequested;
 
             var prefXCSoarDownloadPath = Preferences.Get("xcsoarStorePath", null);
             XCSoarDownloadPath = (prefXCSoarDownloadPath is null) ? _fileDownloader.GetDfaultXCSoarDownloadPath() : prefXCSoarDownloadPath;
@@ -101,6 +103,18 @@ namespace AirspaceDownloader.ViewModels
 
                 SetProperty(ref _xcsoarDownloadPath, value);
                 OnPropertyChanged(nameof(XCSoarDownloadPath));
+            }
+        }
+
+        public string LogText
+        {
+            get => _logText;
+            set
+            {
+                value = string.IsNullOrEmpty(value) ? null : value;
+
+                SetProperty(ref _logText, value);
+                OnPropertyChanged(nameof(LogText));
             }
         }
 
@@ -188,6 +202,12 @@ namespace AirspaceDownloader.ViewModels
             }
 
             IsDownloadEnabled = true;
+        }
+
+        private void OnLogUpdateRequested(object sender, string logText)
+        {
+            logText += "\r\n";
+            LogText += logText;
         }
 
         private void ResetXCSoarDownloadPathClick(object obj)

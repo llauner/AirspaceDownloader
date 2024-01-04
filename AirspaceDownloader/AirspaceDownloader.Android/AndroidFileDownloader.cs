@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using AirspaceDownloader.Droid;
 using AirspaceDownloader.Models;
 using AirspaceDownloader.Services;
 using Android.OS;
+using Java.IO;
 using Xamarin.Forms;
 using static AndroidX.Navigation.ActivityNavigator;
 using Environment = Android.OS.Environment;
+using File = System.IO.File;
 
 [assembly: Dependency(typeof(AndroidFileDownloader))]
 
@@ -58,6 +61,7 @@ namespace AirspaceDownloader.Droid
         public bool IsDownloadBatchFinished => NbFilesToDownload == FilesDownloadedCount;
 
         public event EventHandler<DownloadEventArgs> OnFileDownloaded;
+        public event EventHandler<string> OnLogUpdateRequested;
 
         public AndroidFileDownloader()
         {
@@ -76,6 +80,7 @@ namespace AirspaceDownloader.Droid
             {
                 try
                 {
+                    OnLogUpdateRequested?.Invoke(this, $"Downloading...: {desc.Url}");
                     // Download
                     var webClient = new WebClient();
                     webClient.DownloadDataCompleted += DownloadDataCallback;
@@ -108,6 +113,9 @@ namespace AirspaceDownloader.Droid
                 var textData = Encoding.UTF8.GetString(data);
                 var downloadedFileName = fileDescription.Filename;
 
+                // Log
+                OnLogUpdateRequested?.Invoke(this, $"File Downloaded !: {downloadedFileName}");
+
                 // Save to disk
                 if (IsSaveForDownloads && !fileDescription.IsXCSoarOnly) // Downloads: SeeYou Navigator
                 {
@@ -123,11 +131,14 @@ namespace AirspaceDownloader.Droid
                         if (fileDescription.IsZip)
                         {
                             // --- ZIP file = write to disk and extract
+                            OnLogUpdateRequested?.Invoke(this, $"Writting ZIP: {pathToNewFile}");
                             using var writer = new BinaryWriter(File.OpenWrite(pathToNewFile));
                             writer.Write(data);
                             writer.Close();
 
                             // Extract to disk
+                            // Log
+                            OnLogUpdateRequested?.Invoke(this, $"Extracting ZIP: {pathToNewFile} -> {XCSoarDownloadPath}");
                             ZipService.ExtractZipFileToDirectory(pathToNewFile, XCSoarDownloadPath, true);
                         }
                         else 
@@ -150,7 +161,7 @@ namespace AirspaceDownloader.Droid
             {
                 // Error while downloading the file
                 OnFileDownloaded?.Invoke(this, new DownloadEventArgs(fileDescription, false, "No Internet Connection ?"));
-                Console.WriteLine(e.Error.ToString());
+                System.Console.WriteLine(e.Error.ToString());
             }
         }
 

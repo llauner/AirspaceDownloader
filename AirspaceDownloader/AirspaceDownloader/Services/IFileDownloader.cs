@@ -15,6 +15,7 @@ namespace AirspaceDownloader.Services
 
         void DownloadFiles(List<FileDescription> listUrls);
         event EventHandler<DownloadEventArgs> OnFileDownloaded;
+        event EventHandler<string> OnLogUpdateRequested;
         string GetDfaultXCSoarDownloadPath();
     }
 
