@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using AirspaceDownloader.Models;
@@ -19,6 +20,7 @@ namespace AirspaceDownloader.ViewModels
         public static string XCsoarCombinedFileURL { get; } = "https://planeur-net.github.io/outlanding/combined_guide+champs.xcsoar.zip";
 
         public List<FileDescription> ListFilesToDownload = new List<FileDescription> {
+            new FileDescription(XCsoarCombinedFileURL, true, true),
             new FileDescription(AirspaceFileUrl, false),
             new FileDescription(GuideDesAiresFileUrl, false),
             new FileDescription(ChampsDesAlpesFileUrl, false),
@@ -123,6 +125,16 @@ namespace AirspaceDownloader.ViewModels
             IsDownloadEnabled = false;
             await RequestPermissions();
 
+            // ### Purge List of files to download
+            // Remove files that will not be used
+            foreach (var desc in ListFilesToDownload.ToList())
+            {
+                if (!IsTargetSelectedXcSoar && desc.IsXCSoarOnly)
+                {
+                    ListFilesToDownload.Remove(desc);
+                }
+            }
+            // Download files
             _fileDownloader.DownloadFiles(ListFilesToDownload);
         }
 

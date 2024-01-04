@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Text;
 using AirspaceDownloader.Droid;
@@ -8,6 +9,7 @@ using AirspaceDownloader.Models;
 using AirspaceDownloader.Services;
 using Android.OS;
 using Xamarin.Forms;
+using static AndroidX.Navigation.ActivityNavigator;
 using Environment = Android.OS.Environment;
 
 [assembly: Dependency(typeof(AndroidFileDownloader))]
@@ -118,7 +120,21 @@ namespace AirspaceDownloader.Droid
                     try
                     {
                         var pathToNewFile = Path.Combine(XCSoarDownloadPath, downloadedFileName);
-                        File.WriteAllText(pathToNewFile, textData);
+                        if (fileDescription.IsZip)
+                        {
+                            // --- ZIP file = write to disk and extract
+                            using var writer = new BinaryWriter(File.OpenWrite(pathToNewFile));
+                            writer.Write(data);
+                            writer.Close();
+
+                            // Extract to disk
+                            ZipService.ExtractZipFileToDirectory(pathToNewFile, XCSoarDownloadPath, true);
+                        }
+                        else 
+                        {
+                            // Text file: Save to file directly
+                            File.WriteAllText(pathToNewFile, textData);
+                        }
                     }
                     catch (DirectoryNotFoundException dnfe)
                     {
