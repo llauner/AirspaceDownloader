@@ -16,8 +16,16 @@ namespace AirspaceDownloader.ViewModels
         public static string ChampsDesAlpesFileUrl { get; } = "https://planeur-net.github.io/outlanding/champs_des_alpes.cup";
         public static string ColsDesAlpesFileUrl { get; } = "https://planeur-net.github.io/outlanding/cols_des_alpes.cup";
         public static string MontagnesDesAlpesFileURL { get; } = "https://planeur-net.github.io/outlanding/montagnes_des_alpes.cup";
+        public static string XCsoarCombinedFileURL { get; } = "https://planeur-net.github.io/outlanding/combined_guide+champs.xcsoar.zip";
 
-        public List<string> ListFilesToDownload = new List<string> { AirspaceFileUrl, GuideDesAiresFileUrl, ChampsDesAlpesFileUrl, ColsDesAlpesFileUrl, MontagnesDesAlpesFileURL };
+        public List<FileDescription> ListFilesToDownload = new List<FileDescription> {
+            new FileDescription(AirspaceFileUrl, false),
+            new FileDescription(GuideDesAiresFileUrl, false),
+            new FileDescription(ChampsDesAlpesFileUrl, false),
+            new FileDescription(ColsDesAlpesFileUrl, false),
+            new FileDescription(MontagnesDesAlpesFileURL, true),
+            new FileDescription(MontagnesDesAlpesFileURL, true)
+        };
 
         public ICommand DownloadFileCommand { get; }
         public ICommand ResetXCSoarDownloadPathCommand { get; }

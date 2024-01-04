@@ -4,7 +4,9 @@ using System.IO;
 using System.Net;
 using System.Text;
 using AirspaceDownloader.Droid;
+using AirspaceDownloader.Models;
 using AirspaceDownloader.Services;
+using Android.OS;
 using Xamarin.Forms;
 using Environment = Android.OS.Environment;
 
@@ -20,7 +22,7 @@ namespace AirspaceDownloader.Droid
         private string _xcsoarDownloadPath = null;
             
 
-        private List<string> _listUrlsToDownload = new List<string>();
+        private List<FileDescription> _listUrlsToDownload = new List<FileDescription>();
         private int _filesDownloadedCount = 0;
 
         public bool IsSaveForDownloads { get; set; }
@@ -63,26 +65,25 @@ namespace AirspaceDownloader.Droid
         /// <summary>
         /// Download Outlanding, mountain passes, waypoints from repo: https://github.com/planeur-net/outlanding
         /// </summary>
-        /// <param name="listUrls"></param>
-        public void DownloadFiles(List<string> listUrls)
+        /// <param name="listFileDescription"></param>
+        public void DownloadFiles(List<FileDescription> listFileDescription)
         {
             FilesDownloadedCount = 0;
-            _listUrlsToDownload = listUrls;
-            foreach (var url in _listUrlsToDownload)
+            _listUrlsToDownload = listFileDescription;
+            foreach (var desc in _listUrlsToDownload)
             {
                 try
                 {
-                    var downloadedFileName = Path.GetFileName(url);
                     // Download
                     var webClient = new WebClient();
                     webClient.DownloadDataCompleted += DownloadDataCallback;
 
-                    webClient.DownloadDataAsync(new Uri(url), downloadedFileName);
+                    webClient.DownloadDataAsync(new Uri(desc.Url), desc);
                 }
                 catch (Exception ex)
                 {
                     if (OnFileDownloaded != null)
-                        OnFileDownloaded.Invoke(this, new DownloadEventArgs(false, ex.Message));
+                        OnFileDownloaded.Invoke(this, new DownloadEventArgs(desc, false, ex.Message));
                 }
             }
         }
@@ -95,16 +96,18 @@ namespace AirspaceDownloader.Droid
         /// <param name="e"></param>
         private void DownloadDataCallback(object sender, DownloadDataCompletedEventArgs e)
         {
+            var fileDescription = ((FileDescription)e.UserState);
+
             // Success: the file was downloaded successfully
             if (!e.Cancelled && e.Error == null)
             {
                 // Get the file
                 var data = e.Result;
                 var textData = Encoding.UTF8.GetString(data);
-                var downloadedFileName = e.UserState.ToString();
+                var downloadedFileName = fileDescription.Filename;
 
                 // Save to disk
-                if (IsSaveForDownloads) // Downloads: SeeYou Navigator
+                if (IsSaveForDownloads && !fileDescription.IsXCSoarOnly) // Downloads: SeeYou Navigator
                 {
                     var pathToNewFile = Path.Combine(_downloadPath, downloadedFileName);
                     File.WriteAllText(pathToNewFile, textData);
@@ -119,18 +122,18 @@ namespace AirspaceDownloader.Droid
                     }
                     catch (DirectoryNotFoundException dnfe)
                     {
-                        OnFileDownloaded?.Invoke(this, new DownloadEventArgs(false, dnfe.Message));
+                        OnFileDownloaded?.Invoke(this, new DownloadEventArgs(fileDescription, false, dnfe.Message));
                     }
                 }
 
                 // Notify: 
                 FilesDownloadedCount++;
-                OnFileDownloaded?.Invoke(this, new DownloadEventArgs(true));
+                OnFileDownloaded?.Invoke(this, new DownloadEventArgs(fileDescription, true));
             }
             else
             {
                 // Error while downloading the file
-                OnFileDownloaded?.Invoke(this, new DownloadEventArgs(false, "No Internet Connection ?"));
+                OnFileDownloaded?.Invoke(this, new DownloadEventArgs(fileDescription, false, "No Internet Connection ?"));
                 Console.WriteLine(e.Error.ToString());
             }
         }

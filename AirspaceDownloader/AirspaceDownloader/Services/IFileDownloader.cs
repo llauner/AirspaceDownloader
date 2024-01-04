@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AirspaceDownloader.Models;
+using System;
 using System.Collections.Generic;
 
 namespace AirspaceDownloader.Services
@@ -12,7 +13,7 @@ namespace AirspaceDownloader.Services
         bool IsDownloadBatchFinished { get; }
         string XCSoarDownloadPath { get; set; }
 
-        void DownloadFiles(List<string> listUrls);
+        void DownloadFiles(List<FileDescription> listUrls);
         event EventHandler<DownloadEventArgs> OnFileDownloaded;
         string GetDfaultXCSoarDownloadPath();
     }
@@ -21,9 +22,11 @@ namespace AirspaceDownloader.Services
     {
         public string ErrorMessage;
         public bool FileSaved;
+        public FileDescription FileDescription;
 
-        public DownloadEventArgs(bool fileSaved, string errorMessage = null)
+        public DownloadEventArgs(FileDescription fileDescription, bool fileSaved, string errorMessage = null)
         {
+            FileDescription = fileDescription;
             FileSaved = fileSaved;
             ErrorMessage = errorMessage;
         }
