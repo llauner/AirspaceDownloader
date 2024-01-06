@@ -134,7 +134,9 @@ namespace AirspaceDownloader.Droid
                             OnLogUpdateRequested?.Invoke(this, $"Writting ZIP: {pathToNewFile}");
                             using var writer = new BinaryWriter(File.OpenWrite(pathToNewFile));
                             writer.Write(data);
+                            writer.Flush();
                             writer.Close();
+                            writer.Dispose();
 
                             // Extract to disk
                             // Log
