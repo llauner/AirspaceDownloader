@@ -16,7 +16,9 @@ namespace AirspaceDownloader.ViewModels
         public static string GuideDesAiresFileUrl { get; } = "https://planeur-net.github.io/outlanding/guide_aires_securite.cup";
         public static string ChampsDesAlpesFileUrl { get; } = "https://planeur-net.github.io/outlanding/champs_des_alpes.cup";
         public static string ColsDesAlpesFileUrl { get; } = "https://planeur-net.github.io/outlanding/cols_des_alpes.cup";
-        public static string MontagnesDesAlpesFileURL { get; } = "https://planeur-net.github.io/outlanding/montagnes_des_alpes.cup";
+        public static string MountainPeaksFR { get; } = "https://planeur-net.github.io/outlanding/mountain_peaks_FR.cup";
+        public static string MountainPeaksCH { get; } = "https://planeur-net.github.io/outlanding/mountain_peaks_CH.cup";
+        public static string MountainPeaksIT { get; } = "https://planeur-net.github.io/outlanding/mountain_peaks_IT.cup";
         public static string XCsoarCombinedFileURL { get; } = "https://planeur-net.github.io/outlanding/combined_guide+champs.xcsoar.zip";
 
         public List<FileDescription> ListFilesToDownload = new List<FileDescription> {
@@ -25,8 +27,9 @@ namespace AirspaceDownloader.ViewModels
             new FileDescription(GuideDesAiresFileUrl, false),
             new FileDescription(ChampsDesAlpesFileUrl, false),
             new FileDescription(ColsDesAlpesFileUrl, false),
-            new FileDescription(MontagnesDesAlpesFileURL, true),
-            new FileDescription(MontagnesDesAlpesFileURL, true)
+            new FileDescription(MountainPeaksFR, false),
+            new FileDescription(MountainPeaksCH, false),
+            new FileDescription(MountainPeaksIT, false)
         };
 
         public ICommand DownloadFileCommand { get; }
