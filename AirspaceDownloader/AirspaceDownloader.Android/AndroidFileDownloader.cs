@@ -21,8 +21,8 @@ namespace AirspaceDownloader.Droid
 {
     public class AndroidFileDownloader : IFileDownloader
     {
-        private readonly string _downloadPath =
-            Environment.GetExternalStoragePublicDirectory(Environment.DirectoryDownloads).AbsolutePath;
+        private string _seeYouDownloadPath = null;
+        private string _seeYouAirspaceDownloadPath = null;
 
         private string _xcsoarDownloadPath = null;
             
@@ -42,6 +42,32 @@ namespace AirspaceDownloader.Droid
             set 
             { 
                 _filesDownloadedCount= value;
+            }
+        }
+
+        public string SeeYouDownloadPath
+        {
+            get
+            {
+                return (_seeYouDownloadPath is null) ? GetDefaultSeeYouDownloadPath() : _seeYouDownloadPath;
+            }
+            set
+            {
+                value = (value is null) ? GetDefaultSeeYouDownloadPath() : value;
+                _seeYouDownloadPath = value;
+            }
+        }
+
+        public string SeeYouAirspaceDownloadPath
+        {
+            get
+            {
+                return (_seeYouAirspaceDownloadPath is null) ? GetDefaultSeeYouDownloadPath() : _seeYouAirspaceDownloadPath;
+            }
+            set
+            {
+                value = (value is null) ? GetDefaultSeeYouDownloadPath() : value;
+                _seeYouAirspaceDownloadPath = value;
             }
         }
 
@@ -119,7 +145,8 @@ namespace AirspaceDownloader.Droid
                 // Save to disk
                 if (IsSaveForDownloads && !fileDescription.IsXCSoarOnly) // Downloads: SeeYou Navigator
                 {
-                    var pathToNewFile = Path.Combine(_downloadPath, downloadedFileName);
+                    var isAirspace = Path.GetExtension(downloadedFileName) == ".txt" ? true : false;
+                    var pathToNewFile = isAirspace ? Path.Combine(SeeYouAirspaceDownloadPath, downloadedFileName) : Path.Combine(SeeYouDownloadPath, downloadedFileName);                    
                     File.WriteAllText(pathToNewFile, textData);
                 }
 
@@ -165,6 +192,16 @@ namespace AirspaceDownloader.Droid
                 OnFileDownloaded?.Invoke(this, new DownloadEventArgs(fileDescription, false, "No Internet Connection ?"));
                 System.Console.WriteLine(e.Error.ToString());
             }
+        }
+
+
+        /// <summary>
+        /// Default SeeYou Download path
+        /// </summary>
+        /// <returns></returns>
+        public string GetDefaultSeeYouDownloadPath()
+        {
+            return Environment.GetExternalStoragePublicDirectory(Environment.DirectoryDownloads).AbsolutePath;
         }
 
         /// <summary>

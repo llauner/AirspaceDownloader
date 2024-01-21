@@ -39,6 +39,8 @@ namespace AirspaceDownloader.ViewModels
         private bool _isDownloadEnabled = true;
         private bool _isTargetSelectedDownloads = true;
         private bool _isTargetSelectedXcSoar = true;
+        private string _seeYouDownloadPath = null;
+        private string _seeYouAirsapceDownloadPath = null;
         private string _xcsoarDownloadPath = null;
         private string _logText = "";
 
@@ -53,6 +55,14 @@ namespace AirspaceDownloader.ViewModels
 
             _fileDownloader.OnFileDownloaded += OnFileDownloaded;
             _fileDownloader.OnLogUpdateRequested += OnLogUpdateRequested;
+
+            var prefSeeYouDownloadPath = Preferences.Get("seeYouStorePath", null);
+            SeeYouDownloadPath = (prefSeeYouDownloadPath is null) ? _fileDownloader.GetDefaultSeeYouDownloadPath() : prefSeeYouDownloadPath;
+            _fileDownloader.SeeYouDownloadPath = SeeYouDownloadPath;
+
+            var prefSeeYouAirspaceDownloadPath = Preferences.Get("seeYouAirsapceStorePath", null);
+            SeeYouAirspaceDownloadPath = (prefSeeYouAirspaceDownloadPath is null) ? _fileDownloader.GetDefaultSeeYouDownloadPath() : prefSeeYouAirspaceDownloadPath;
+            _fileDownloader.SeeYouAirspaceDownloadPath = SeeYouAirspaceDownloadPath;
 
             var prefXCSoarDownloadPath = Preferences.Get("xcsoarStorePath", null);
             XCSoarDownloadPath = (prefXCSoarDownloadPath is null) ? _fileDownloader.GetDfaultXCSoarDownloadPath() : prefXCSoarDownloadPath;
@@ -96,6 +106,32 @@ namespace AirspaceDownloader.ViewModels
             }
         }
 
+        public string SeeYouDownloadPath
+        {
+            get => _seeYouDownloadPath;
+            set
+            {
+                value = string.IsNullOrEmpty(value) ? null : value;
+                Preferences.Set("seeYouStorePath", value);
+
+                SetProperty(ref _seeYouDownloadPath, value);
+                OnPropertyChanged(nameof(SeeYouDownloadPath));
+            }
+        }
+
+        public string SeeYouAirspaceDownloadPath
+        {
+            get => _seeYouAirsapceDownloadPath;
+            set
+            {
+                value = string.IsNullOrEmpty(value) ? null : value;
+                Preferences.Set("seeYouAirsapceStorePath", value);
+
+                SetProperty(ref _seeYouAirsapceDownloadPath, value);
+                OnPropertyChanged(nameof(SeeYouAirspaceDownloadPath));
+            }
+        }
+
         public string XCSoarDownloadPath
         {
             get => _xcsoarDownloadPath;
@@ -134,6 +170,8 @@ namespace AirspaceDownloader.ViewModels
             //Preferences.Set("xcsoarStorePath", XCSoarDownloadPath);
 
             // Setup fileDownloader Parameters
+            _fileDownloader.SeeYouDownloadPath = SeeYouDownloadPath;
+            _fileDownloader.SeeYouAirspaceDownloadPath = SeeYouAirspaceDownloadPath;
             _fileDownloader.XCSoarDownloadPath = XCSoarDownloadPath;
             _fileDownloader.IsSaveForDownloads = IsTargetSelectedDownloads;
             _fileDownloader.IsSaveForXcSoar = IsTargetSelectedXcSoar;

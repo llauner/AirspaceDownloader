@@ -20,6 +20,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <StackLayout BackgroundColor="{StaticResource Accent}" VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
@@ -32,17 +33,24 @@
 
 
         <ScrollView Grid.Row="1">
-            <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Padding="30,5,0,0">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Padding="5,5,0,0">
                 <ContentView>
                     <CheckBox  IsChecked="{Binding IsTargetSelectedDownloads}" WidthRequest="25" HeightRequest="25"/>
                 </ContentView>
-                <Label
-                    Text="SeeYou Navigator -> /Downloads" HorizontalOptions="StartAndExpand"></Label>
+                <Label Text="Waypoints" TextDecorations="Underline"  />
+                <Entry x:Name="entrySeeYou" HorizontalOptions="Start" WidthRequest="250"  FontSize="12" Text="{Binding SeeYouDownloadPath}" />
             </StackLayout>
         </ScrollView>
 
         <ScrollView Grid.Row="2">
-            <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Padding="30,25,0,0">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Padding="5,5,0,0">
+                <Label Text="Airspace" TextDecorations="Underline"  />
+                <Entry x:Name="entrySeeYouAirspace" HorizontalOptions="Start" WidthRequest="250"  FontSize="12" Text="{Binding SeeYouAirspaceDownloadPath}" />
+            </StackLayout>
+        </ScrollView>
+
+        <ScrollView Grid.Row="3">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Padding="5,25,0,0">
                 <ContentView>
                     <CheckBox  IsChecked="{Binding IsTargetSelectedXcSoar}" WidthRequest="25" HeightRequest="25"/>
                 </ContentView>
@@ -58,7 +66,7 @@
             </StackLayout>
         </ScrollView>
 
-        <ScrollView Grid.Row="3">
+        <ScrollView Grid.Row="4">
             <StackLayout Orientation="Vertical" Padding="5,5,5,5" Spacing="10">
                 <Editor x:Name="editor" 
                         Text="{Binding LogText}"
