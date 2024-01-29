@@ -165,6 +165,18 @@ namespace AirspaceDownloader.Droid
                             writer.Close();
                             writer.Dispose();
 
+                            // Delete previous Pics directory if existed
+                            var picsDirUpperCase =Path.Combine(XCSoarDownloadPath, "Pics");
+                            var picsDirLowerCase = Path.Combine(XCSoarDownloadPath, "pics");
+                            if (Directory.Exists(picsDirUpperCase)) 
+                            {
+                                Directory.Delete(picsDirUpperCase, true);
+                            }
+                            if (Directory.Exists(picsDirLowerCase))
+                            {
+                                Directory.Delete(picsDirLowerCase, true);
+                            }
+
                             // Extract to disk
                             // Log
                             OnLogUpdateRequested?.Invoke(this, $"Extracting ZIP: {pathToNewFile} -> {XCSoarDownloadPath}");
