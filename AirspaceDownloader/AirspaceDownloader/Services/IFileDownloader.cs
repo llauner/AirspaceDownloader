@@ -14,6 +14,7 @@ namespace AirspaceDownloader.Services
 
         string SeeYouDownloadPath { get; set; }
         string SeeYouAirspaceDownloadPath { get; set; }
+        string SeeYouBothFilesDownloadPath { get; set; }
         string XCSoarDownloadPath { get; set; }
 
         void DownloadFiles(List<FileDescription> listUrls);

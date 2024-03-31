@@ -23,6 +23,7 @@ namespace AirspaceDownloader.Droid
     {
         private string _seeYouDownloadPath = null;
         private string _seeYouAirspaceDownloadPath = null;
+        private string _seeYouBothFilesDownloadPath = null;
 
         private string _xcsoarDownloadPath = null;
             
@@ -68,6 +69,19 @@ namespace AirspaceDownloader.Droid
             {
                 value = (value is null) ? GetDefaultSeeYouDownloadPath() : value;
                 _seeYouAirspaceDownloadPath = value;
+            }
+        }
+
+        public string SeeYouBothFilesDownloadPath
+        {
+            get
+            {
+                return (_seeYouBothFilesDownloadPath is null) ? GetDefaultSeeYouDownloadPath() : _seeYouBothFilesDownloadPath;
+            }
+            set
+            {
+                value = (value is null) ? GetDefaultSeeYouDownloadPath() : value;
+                _seeYouBothFilesDownloadPath = value;
             }
         }
 
@@ -146,7 +160,10 @@ namespace AirspaceDownloader.Droid
                 if (IsSaveForDownloads && !fileDescription.IsXCSoarOnly) // Downloads: SeeYou Navigator
                 {
                     var isAirspace = Path.GetExtension(downloadedFileName) == ".txt" ? true : false;
-                    var pathToNewFile = isAirspace ? Path.Combine(SeeYouAirspaceDownloadPath, downloadedFileName) : Path.Combine(SeeYouDownloadPath, downloadedFileName);                    
+                    var pathToNewFile = isAirspace ? Path.Combine(SeeYouAirspaceDownloadPath, downloadedFileName) : Path.Combine(SeeYouDownloadPath, downloadedFileName);      
+                    var pathToNewFileBoth = Path.Combine(SeeYouBothFilesDownloadPath, downloadedFileName);
+
+                    File.WriteAllText(pathToNewFileBoth, textData);
                     File.WriteAllText(pathToNewFile, textData);
                 }
 

@@ -20,6 +20,7 @@ namespace AirspaceDownloader.ViewModels
         public static string MountainPeaksCH { get; } = "https://planeur-net.github.io/outlanding/mountain_peaks_CH.cup";
         public static string MountainPeaksIT { get; } = "https://planeur-net.github.io/outlanding/mountain_peaks_IT.cup";
         public static string XCsoarCombinedFileURL { get; } = "https://planeur-net.github.io/outlanding/combined_guide+champs.xcsoar.zip";
+        public static string LudoWaypointsFileUrl { get; } = "https://planeur-net.github.io/outlanding/Misc/Ludo_waypoints.cup";
 
         public List<FileDescription> ListFilesToDownload = new List<FileDescription> {
             new FileDescription(XCsoarCombinedFileURL, true, true),
@@ -29,7 +30,8 @@ namespace AirspaceDownloader.ViewModels
             new FileDescription(ColsDesAlpesFileUrl, false),
             new FileDescription(MountainPeaksFR, false),
             new FileDescription(MountainPeaksCH, false),
-            new FileDescription(MountainPeaksIT, false)
+            new FileDescription(MountainPeaksIT, false),
+            new FileDescription(LudoWaypointsFileUrl, false)
         };
 
         public ICommand DownloadFileCommand { get; }
@@ -41,6 +43,7 @@ namespace AirspaceDownloader.ViewModels
         private bool _isTargetSelectedXcSoar = true;
         private string _seeYouDownloadPath = null;
         private string _seeYouAirsapceDownloadPath = null;
+        private string _seeYouBothFilesDownloadPath = null;
         private string _xcsoarDownloadPath = null;
         private string _logText = "";
 
@@ -63,6 +66,11 @@ namespace AirspaceDownloader.ViewModels
             var prefSeeYouAirspaceDownloadPath = Preferences.Get("seeYouAirsapceStorePath", null);
             SeeYouAirspaceDownloadPath = (prefSeeYouAirspaceDownloadPath is null) ? _fileDownloader.GetDefaultSeeYouDownloadPath() : prefSeeYouAirspaceDownloadPath;
             _fileDownloader.SeeYouAirspaceDownloadPath = SeeYouAirspaceDownloadPath;
+
+            var prefSeeYouBothFilesDownloadPath = Preferences.Get("seeYouBothFilesDownloadPath", null);
+            SeeYouBothFilesDownloadPath = (prefSeeYouBothFilesDownloadPath is null) ? _fileDownloader.GetDefaultSeeYouDownloadPath() : prefSeeYouBothFilesDownloadPath;
+            _fileDownloader.SeeYouBothFilesDownloadPath = SeeYouBothFilesDownloadPath;
+
 
             var prefXCSoarDownloadPath = Preferences.Get("xcsoarStorePath", null);
             XCSoarDownloadPath = (prefXCSoarDownloadPath is null) ? _fileDownloader.GetDfaultXCSoarDownloadPath() : prefXCSoarDownloadPath;
@@ -129,6 +137,19 @@ namespace AirspaceDownloader.ViewModels
 
                 SetProperty(ref _seeYouAirsapceDownloadPath, value);
                 OnPropertyChanged(nameof(SeeYouAirspaceDownloadPath));
+            }
+        }
+
+        public string SeeYouBothFilesDownloadPath
+        {
+            get => _seeYouBothFilesDownloadPath;
+            set
+            {
+                value = string.IsNullOrEmpty(value) ? null : value;
+                Preferences.Set("seeYouBothFilesDownloadPath", value);
+
+                SetProperty(ref _seeYouBothFilesDownloadPath, value);
+                OnPropertyChanged(nameof(SeeYouBothFilesDownloadPath));
             }
         }
 
