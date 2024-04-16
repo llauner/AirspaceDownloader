@@ -13,6 +13,7 @@ namespace AirspaceDownloader.ViewModels
     public class MainViewModel : BaseViewModel
     {
         public static string AirspaceFileUrl { get; } = "https://planeur-net.github.io/airspace/france.txt";
+        public static string AirspaceOpenAirStandardFileUrl { get; } = "https://planeur-net.github.io/airspace/france_openair_standard.txt";
         public static string GuideDesAiresFileUrl { get; } = "https://planeur-net.github.io/outlanding/guide_aires_securite.cup";
         public static string ChampsDesAlpesFileUrl { get; } = "https://planeur-net.github.io/outlanding/champs_des_alpes.cup";
         public static string ColsDesAlpesFileUrl { get; } = "https://planeur-net.github.io/outlanding/cols_des_alpes.cup";
@@ -25,6 +26,7 @@ namespace AirspaceDownloader.ViewModels
         public List<FileDescription> ListFilesToDownload = new List<FileDescription> {
             new FileDescription(XCsoarCombinedFileURL, true, true),
             new FileDescription(AirspaceFileUrl, false),
+            new FileDescription(AirspaceOpenAirStandardFileUrl, false),
             new FileDescription(GuideDesAiresFileUrl, false),
             new FileDescription(ChampsDesAlpesFileUrl, false),
             new FileDescription(ColsDesAlpesFileUrl, false),
